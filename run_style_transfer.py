@@ -8,6 +8,7 @@ from loss_functions import GramMatrix_gen, GramMSELoss
 from torch import optim
 from network import model_instantiate
 import numpy as np
+from matplotlib.pyplot import imshow
 
 def initialize_image_tensors(style_image_path,content_image_path):
 	"""Generate the image tensors for style and content images and the variable images which will be worked upon
@@ -72,10 +73,10 @@ def style_transfer_main(network,style_image,content_image,var_image,network_opti
     
 	optimizer=optim.LBFGS([var_image])
 
-    
+	print(max_epochs)
 	num_iter=[0]
 	while num_iter[0] <= max_epochs:
-
+		print(num_iter[0])
 		def closure():
 			optimizer.zero_grad()
     		#compute for the variable image style and content loss components
@@ -109,10 +110,12 @@ if __name__ == '__main__':
 
 	style_image_torch,content_image_torch,var_image_torch=initialize_image_tensors(style_image_path,content_image_path)
 	loss_network=model_instantiate()
-	var_image=style_transfer_main(loss_network,style_image_torch,content_image_torch,var_image_torch,max_epochs=10)
+	var_image=style_transfer_main(loss_network,style_image_torch,content_image_torch,var_image_torch,max_epochs=60)
 
 	post=process_images.postprocess_tensor(var_image.data[0].cpu().squeeze())
-	imshow(post);show()
+	post.save('post_process_100.png')
+	#print(type(post))
+	imshow(post)
 
 
 
