@@ -7,6 +7,7 @@ from torch.autograd import Variable
 from loss_functions import GramMatrix_gen, GramMSELoss
 from torch import optim
 from network import model_instantiate
+import numpy as np
 
 def initialize_image_tensors(style_image_path,content_image_path):
 	"""Generate the image tensors for style and content images and the variable images which will be worked upon
@@ -41,8 +42,11 @@ def style_transfer_main(network,style_image,content_image,var_image,network_opti
 			style_weight_list=[1e3/n**2 for n in [64,128,256,512,512]] #5 weights for 5 layers
 			content_weight_list=[1e0]
 
+			style_weights=dict(zip(style_layers,style_weight_list))
+			content_weights=dict(zip(content_layers,content_weight_list))
+
 	style_feature=network(style_image,option="style") #a dictionary with each key as the style layer name
-	content_feature=network(content_image,option="target") # a dictionary with each key as the content layer name 
+	content_feature=network(content_image,option="content") # a dictionary with each key as the content layer name 
 
 
 	style_target={}
@@ -69,34 +73,33 @@ def style_transfer_main(network,style_image,content_image,var_image,network_opti
 	optimizer=optim.LBFGS([var_image])
 
     
-
-	for i in np.arange(max_epochs):
+	num_iter=[0]
+	while num_iter[0] <= max_epochs:
 
 		def closure():
 			optimizer.zero_grad()
     		#compute for the variable image style and content loss components
-    		style_var_feature=network(var_image,option="style")
-    		content_var_feature=network(var_image,option="content")
+			style_var_feature=network(var_image,option="style")
+			content_var_feature=network(var_image,option="content")
 
     		#style_loss_function compute
-    		style_losses=[ style_loss_fns[key](style_var_feature[key],value) for key,value in style_target.items() ]
+			style_losses=[ style_weights[key]*style_loss_fns[key](style_var_feature[key],value) for key,value in style_target.items() ]
 
     		#content loss_function compute 
-    		content_losses=[ content_loss_fns[key](content_var_feature[key],value) for key,value in content_target.items() ]
+			content_losses=[ content_weights[key]*content_loss_fns[key](content_var_feature[key],value) for key,value in content_target.items() ]
 
     		#overall loss 
-    		style_loss=sum(style_losses)
-    		content_loss=sum(content_losses)
+			style_loss=sum(style_losses)
+			content_loss=sum(content_losses)
 
-
-    		loss=style_loss+content_loss 
-
-    		loss.backward()
-    		print('Iteration: %d, Style loss: %f, Content loss: %f, Overall loss:%f '%(i+1, style_loss.data[0], content_loss.data[0], loss.data[0]))
-    		return(loss)
-    	optimizer.step(closure)
-
-    return(var_image)
+			loss=style_loss+content_loss 
+			loss.backward()
+			num_iter[0]=num_iter[0]+1
+			print('Iteration: %d, Style loss: %f, Content loss: %f, Overall loss:%f '%(num_iter[0]+1, style_loss, content_loss, loss))
+			
+			return(loss)
+		optimizer.step(closure)
+	return(var_image)
 
 
 if __name__ == '__main__':
@@ -106,7 +109,7 @@ if __name__ == '__main__':
 
 	style_image_torch,content_image_torch,var_image_torch=initialize_image_tensors(style_image_path,content_image_path)
 	loss_network=model_instantiate()
-	var_image=style_transfer_main(loss_network,style_image_torch,content_image_torch,var_image_torch)
+	var_image=style_transfer_main(loss_network,style_image_torch,content_image_torch,var_image_torch,max_epochs=10)
 
 	post=process_images.postprocess_tensor(var_image.data[0].cpu().squeeze())
 	imshow(post);show()

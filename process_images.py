@@ -27,7 +27,7 @@ def preprocess_transforms(img_size=512):
 def postprocess_transforms():
 	"""Postprocessing transformations after getting the output from network
 	"""
-	postpa = transforms.Compose([transforms.Lambda(lambda x: x.mul_(1./255)),
+	post = transforms.Compose([transforms.Lambda(lambda x: x.mul_(1./255)),
                            transforms.Normalize(mean=[-0.40760392, -0.45795686, -0.48501961], #add imagenet mean
                                                 std=[1,1,1]),
                            transforms.Lambda(lambda x: x[torch.LongTensor([2,1,0])]), #turn to RGB
