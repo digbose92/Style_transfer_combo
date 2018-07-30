@@ -10,7 +10,7 @@ Pytorch based implementations of style transfer algorithms .
 ## Running the code:
 - The style transfer code can be run using `run_style_transfer.py` as follows:
 ```python
-python run_style_transfer.py &mdash style_path '../images/wheat_field_van_gogh.jpg' &mdash content_path '../images/santa_monica.jpg' &mdash result_dir '../images' ---max_epochs 60
+python run_style_transfer.py &mdash; style_path '../images/wheat_field_van_gogh.jpg' &mdash; content_path '../images/santa_monica.jpg' &mdash; result_dir '../images' ---max_epochs 60
 ```
  
 
