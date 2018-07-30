@@ -46,6 +46,8 @@ def model_instantiate(model_option='vgg16'):
 		for param in model_vgg.parameters():
 			param.requires_grad=False
 		Lossnetwork=VGGLoSSNetwork(model_vgg)
+		device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+		Lossnetwork.to(device)
 		return(Lossnetwork)
 
 def forward_pass_example(img_path):
@@ -65,7 +67,7 @@ def forward_pass_example(img_path):
 	img_pil=Image.open(img_path)
 	img_tensor = preprocess(img_pil)
 	img_tensor.unsqueeze_(0)
-	img_variable = Variable(img_tensor)
+	img_variable = Variable(img_tensor.cuda())
 
 	return(img_variable)
 
