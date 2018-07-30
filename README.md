@@ -8,10 +8,14 @@ Pytorch based implementations of style transfer algorithms .
 - GPU support enabled .
 
 ## Results:
- - Given the following style and content images:
- ![Style image] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/Wheat-Field-with-Cypresses-(1889)-Vincent-van-Gogh-Met.jpg)
+
+Style Image:
+
+ ![alt text] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/Wheat-Field-with-Cypresses-(1889)-Vincent-van-Gogh-Met.jpg)
  
- ![Content image] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/santa_monica_beach_new.jpg)
+Content Image: 
+ ![alt text] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/santa_monica_beach_new.jpg)
+
  
 ## TODO:
 
