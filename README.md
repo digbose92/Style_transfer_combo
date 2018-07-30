@@ -11,10 +11,10 @@ Pytorch based implementations of style transfer algorithms .
 
 Style Image:
 
- ![Alt Text] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/Wheat-Field-with-Cypresses-(1889)-Vincent-van-Gogh-Met.jpg)
+ ![picture alt] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/Wheat-Field-with-Cypresses-(1889)-Vincent-van-Gogh-Met.jpg)
  
 Content Image: 
- ![Alt Text] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/santa_monica_beach_new.jpg)
+ ![picture alt] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/santa_monica_beach_new.jpg)
 
  
 ## TODO:
