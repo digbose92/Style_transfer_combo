@@ -7,6 +7,10 @@ Pytorch based implementations of style transfer algorithms .
 
 - GPU support enabled .
 
+##Running the code:
+- The style transfer code can be run using 'run_style_transfer.py' as follows:
+ 
+
 ## Results:
 
 *Style Image*:
