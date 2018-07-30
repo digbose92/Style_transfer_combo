@@ -9,6 +9,7 @@
 5. multilpy each pixel by 255
 """
 from torchvision import transforms 
+import torch
 
 
 def preprocess_transforms(img_size=512):
