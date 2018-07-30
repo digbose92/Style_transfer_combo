@@ -6,6 +6,12 @@ Pytorch based implementations of style transfer algorithms .
 - Implementation of the basic algorithm mentioned in Leon Gatys's paper https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf
 
 - GPU support enabled .
+
+## Results:
+ - Given the following style and content images:
+ ![Style image] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/Wheat-Field-with-Cypresses-(1889)-Vincent-van-Gogh-Met.jpg)
+ 
+ ![Content image] (https://github.com/digbose92/Style_transfer_combo/blob/master/images/santa_monica_beach_new.jpg)
  
 ## TODO:
 
