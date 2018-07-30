@@ -8,7 +8,8 @@ from loss_functions import GramMatrix_gen, GramMSELoss
 from torch import optim
 from network import model_instantiate
 import numpy as np
-from matplotlib.pyplot import imshow
+import argparse
+import os
 
 def initialize_image_tensors(style_image_path,content_image_path):
 	"""Generate the image tensors for style and content images and the variable images which will be worked upon
@@ -105,18 +106,27 @@ def style_transfer_main(network,style_image,content_image,var_image,network_opti
 
 if __name__ == '__main__':
 	
-	style_image_path="C:\\Users\\bosed\\Documents\\style_transfer_codes\\style_images\\Wheat-Field-with-Cypresses-(1889)-Vincent-van-Gogh-Met.jpg"
-	content_image_path="C:\\Users\\bosed\\Documents\\style_transfer_codes\\content_images\\santa_monica_beach_new.jpg"
+	
+	#parsing the command line arguments for getting the filepaths
+	parser=argparse.ArgumentParser()
+	parser.add_argument('--style_path', type=str, 
+        help='Path of the style image', default='../images/wheat_field_van_gogh.jpg')
+	parser.add_argument('--content_path', type=str, 
+        help='Path of the content image', default='../images/santa_monica.jpg')
+	parser.add_argument('--result_dir', type=str, 
+        help='Folder for the output results', default='../images')
+	parser.add_argument('--max_epochs', type=int, 
+        help='Maximum number of epochs', default=50)
+	args=parser.parse_args()
+	
 
-	style_image_torch,content_image_torch,var_image_torch=initialize_image_tensors(style_image_path,content_image_path)
+	style_image_torch,content_image_torch,var_image_torch=initialize_image_tensors(args.style_path,args.content_path)
 	loss_network=model_instantiate()
-	var_image=style_transfer_main(loss_network,style_image_torch,content_image_torch,var_image_torch,max_epochs=60)
+	var_image=style_transfer_main(loss_network,style_image_torch,content_image_torch,var_image_torch,max_epochs=args.max_epochs)
 
 	post=process_images.postprocess_tensor(var_image.data[0].cpu().squeeze())
-	post.save('post_process_100.png')
-	#print(type(post))
-	imshow(post)
-
+	post.save(os.path.join(args.results_dir,'results.png'))
+	
 
 
 
