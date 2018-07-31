@@ -8,10 +8,10 @@ Pytorch based implementations of style transfer algorithms .
 - CPU and GPU support enabled .
 
 ## Running the code:
-- The style transfer code can be run using `run_style_transfer.py` as follows:
--- For enabling GPU use:  
+The style transfer code can be run using `run_style_transfer.py` as follows:
+- For enabling GPU use:  
 `"python run_style_transfer.py --style_path '../images/wheat_field_van_gogh.jpg' --content_path '../images/santa_monica.jpg' --result_dir '../images' --max_epochs 60 --device 'cuda'"`
--- For using CPU:
+- For using CPU:
 `"python run_style_transfer.py --style_path '../images/wheat_field_van_gogh.jpg' --content_path '../images/santa_monica.jpg' --result_dir '../images' --max_epochs 60 --device 'cpu'"`
  
 
