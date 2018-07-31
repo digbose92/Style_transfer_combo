@@ -16,6 +16,7 @@ The style transfer code can be run using `run_style_transfer.py` as follows:
  
 
 ## Results:
+The above results have been generated after running the model in CPU. Due to limited memory of NVIDIA 940 MX GPU (4 GB) at my disposal, the optimization has been done using CPU.
 Left to Right (Style Image, Content Image, Result)
 <p align='center'>
   <img src='images/wheat_field_van_gogh.jpg' height='194' width='290'/>
