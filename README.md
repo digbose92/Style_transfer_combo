@@ -18,9 +18,9 @@ The style transfer code can be run using `run_style_transfer.py` as follows:
 ## Results:
 Left to Right (Style Image, Content Image, Result)
 <p align='center'>
-  <img src='images/wheat_field_van_gogh.jpg' height='200' width='300'/>
-  <img src='images/santa_monica.jpg' height='200' width='300'/>
-  <img src='images/wheat_field_santa_monica_results.png' height='200' width='300'/>
+  <img src='images/wheat_field_van_gogh.jpg' height='194' width='290'/>
+  <img src='images/santa_monica.jpg' height='194' width='290'/>
+  <img src='images/wheat_field_santa_monica_results.png' height='194' width='290'/>
 </p>
 
 
