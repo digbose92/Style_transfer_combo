@@ -36,7 +36,7 @@ class VGGLoSSNetwork(torch.nn.Module):
 					output[self.content_name_maps[name]]=x
 		return(output)
 
-def model_instantiate(model_option='vgg16'):
+def model_instantiate(model_option='vgg16',device="cpu"):
 
 	"""Instantiates the pretrained models along with the networks for various loss computations
 	"""
@@ -46,8 +46,9 @@ def model_instantiate(model_option='vgg16'):
 		for param in model_vgg.parameters():
 			param.requires_grad=False
 		Lossnetwork=VGGLoSSNetwork(model_vgg)
-		device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-		Lossnetwork.to(device)
+		#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+		if(device=="cuda"):
+			Lossnetwork.to(device)
 		return(Lossnetwork)
 
 def forward_pass_example(img_path):

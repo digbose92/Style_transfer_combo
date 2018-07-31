@@ -11,7 +11,7 @@ import numpy as np
 import argparse
 import os
 
-def initialize_image_tensors(style_image_path,content_image_path):
+def initialize_image_tensors(style_image_path,content_image_path,device):
 	"""Generate the image tensors for style and content images and the variable images which will be worked upon
 	"""
 
@@ -23,17 +23,21 @@ def initialize_image_tensors(style_image_path,content_image_path):
 	style_image_prep=prep(style_image_obj)
 	content_image_prep=prep(content_image_obj)
 
-	style_image_torch=Variable(style_image_prep.unsqueeze(0).cuda())
-	content_image_torch=Variable(content_image_prep.unsqueeze(0).cuda())
-
-	#copying the content preprocessed image to the variable image which we will be worked upon
-	var_image_torch=Variable(content_image_torch.data.clone(),requires_grad=True)
+	if (device =='cuda'):
+		style_image_torch=Variable(style_image_prep.unsqueeze(0).cuda())
+		content_image_torch=Variable(content_image_prep.unsqueeze(0).cuda())
+		#copying the content preprocessed image to the variable image which we will be worked upon
+		var_image_torch=Variable(content_image_torch.data.clone(),requires_grad=True)
+	else:
+		style_image_torch=Variable(style_image_prep.unsqueeze(0))
+		content_image_torch=Variable(content_image_prep.unsqueeze(0))
+		var_image_torch=Variable(content_image_torch.clone(),requires_grad=True)
 
 	return(style_image_torch,content_image_torch,var_image_torch)
 
 
 
-def style_transfer_main(network,style_image,content_image,var_image,network_option="vgg16",max_epochs=100):
+def style_transfer_main(network,style_image,content_image,var_image,network_option="vgg16",max_epochs=100,device="cpu"):
 	"""main function for running the optimization of the style transfer algorithm
 	"""
 
@@ -66,12 +70,14 @@ def style_transfer_main(network,style_image,content_image,var_image,network_opti
 	style_loss_fns=[GramMSELoss()]*len(style_layers)
 	content_loss_fns=[nn.MSELoss()]*len(content_layers)
 
-	if torch.cuda.is_available():
+	if device=="cuda":
 		style_loss_fns = [style_loss_fn.cuda() for style_loss_fn in style_loss_fns]
-		style_loss_fns=dict(zip(style_layers,style_loss_fns))
 		content_loss_fns = [content_loss_fn.cuda() for content_loss_fn in content_loss_fns]
-		content_loss_fns=dict(zip(content_layers,content_loss_fns))
     
+
+	style_loss_fns=dict(zip(style_layers,style_loss_fns))
+	content_loss_fns=dict(zip(content_layers,content_loss_fns))
+
 	optimizer=optim.LBFGS([var_image])
 
 	print(max_epochs)
@@ -117,15 +123,21 @@ if __name__ == '__main__':
         help='Folder for the output results', default='../images')
 	parser.add_argument('--max_epochs', type=int, 
         help='Maximum number of epochs', default=50)
+	parser.add_argument('--device', type=str, 
+        help='Device option', default="cpu")
 	args=parser.parse_args()
 	
 
-	style_image_torch,content_image_torch,var_image_torch=initialize_image_tensors(args.style_path,args.content_path)
-	loss_network=model_instantiate()
-	var_image=style_transfer_main(loss_network,style_image_torch,content_image_torch,var_image_torch,max_epochs=args.max_epochs)
+	style_image_torch,content_image_torch,var_image_torch=initialize_image_tensors(args.style_path,args.content_path,args.device)
+	loss_network=model_instantiate(device=args.device)
+	print(loss_network)
+	var_image=style_transfer_main(loss_network,style_image_torch,content_image_torch,var_image_torch,max_epochs=args.max_epochs,device=args.device)
 
-	post=process_images.postprocess_tensor(var_image.data[0].cpu().squeeze())
-	post.save(os.path.join(args.results_dir,'results.png'))
+	if (args.device=="cpu"):
+		post=process_images.postprocess_tensor(var_image.data[0].squeeze())
+	else:
+		post=process_images.postprocess_tensor(var_image.data[0].cpu().squeeze())
+	post.save(os.path.join(args.result_dir,'results.png'))
 	
 
 
